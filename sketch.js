@@ -7,7 +7,8 @@
   };
 
   spawnRandom(state);
-  printBoard(state);
+  spawnRandom(state);
+  // printBoard(state);
 
   document.addEventListener("keydown", (e) => keyPress(state, e));
 })();
@@ -72,15 +73,17 @@ function renderBoard(state) {
       let action = state.actions[i];
       let newPos = action.newPos;
       let newNum = posToNum(newPos, 4);
+      let newTile = state.board[newPos.y][newPos.x];
       state.tileAnims.push(
         anime({
           targets: tileElm,
           top: `${newPos.y * 50 + b.offsetTop}px`,
           left: `${newPos.x * 50 + b.offsetLeft}px`,
           easing: "easeOutExpo",
+          backgroundColor: getTileColor(newTile),
           duration: 200,
           complete: () => {
-            tileElm.innerHTML = state.board[newPos.y][newPos.x];
+            tileElm.innerHTML = newTile;
             if (action.combine) {
               tileElm.remove();
             }
@@ -98,14 +101,16 @@ function renderBoard(state) {
       });
       if (mergingToObj) {
         //* If something merges onto here
+        let newTile = state.board[newPos.y][newPos.x];
         state.tileAnims.push(
           anime({
             targets: tileElm,
             keyframes: [{ scale: 1.5 }, { scale: 1 }],
             easing: "easeOutExpo",
             duration: 100,
+            backgroundColor: getTileColor(newTile),
             complete: () => {
-              tileElm.innerHTML = state.board[newPos.y][newPos.x];
+              tileElm.innerHTML = newTile;
             },
           })
         );
@@ -114,6 +119,23 @@ function renderBoard(state) {
     }
   }
   state.tiles = newTiles;
+}
+
+function getTileColor(num) {
+  return hslToHex((num / 11) * 360, 100, 50);
+}
+
+function hslToHex(h, s, l) {
+  l /= 100;
+  const a = (s * Math.min(l, 1 - l)) / 100;
+  const f = (n) => {
+    const k = (n + h / 30) % 12;
+    const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+    return Math.round(255 * color)
+      .toString(16)
+      .padStart(2, "0"); // convert to Hex and prefix "0" if needed
+  };
+  return `#${f(0)}${f(8)}${f(4)}`;
 }
 
 function createBoard() {
@@ -157,9 +179,18 @@ function spawnTile(state, pos, val) {
   div.classList.add("tile");
   div.style.top = `${pos.y * 50 + b.offsetTop}px`;
   div.style.left = `${pos.x * 50 + b.offsetLeft}px`;
+  div.style.backgroundColor = getTileColor(val);
   div.innerHTML = val;
   b.appendChild(div);
   state.tiles[posToNum(pos, 4)] = div;
+  state.tileAnims.push(
+    anime({
+      targets: div,
+      keyframes: [{ scale: 1.5 }, { scale: 1 }],
+      easing: "easeOutExpo",
+      duration: 100,
+    })
+  );
 }
 
 function getOpenPositions(board) {
