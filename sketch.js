@@ -5,23 +5,26 @@
     actions: {},
   };
 
-  state.board = [
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [2, 2, 0, 0],
-  ];
-  spawnTile(state, { x: 0, y: 3 }, 2);
-  spawnTile(state, { x: 1, y: 3 }, 2);
+  // state.board = [
+  //   [0, 0, 0, 0],
+  //   [0, 0, 0, 0],
+  //   [0, 0, 0, 0],
+  //   [3, 2, 0, 1],
+  // ];
+  // spawnTile(state, { x: 0, y: 3 }, 3);
+  // spawnTile(state, { x: 1, y: 3 }, 2);
+  // spawnTile(state, { x: 3, y: 3 }, 1);
   // spawnTile(state, { x: 2, y: 3 }, 1);
   //   state.board[2][3] = 3;
   // state.board[0][0] = 1;
   // state.board[0][1] = 1;
   // state.board[0][2] = 1;
   // state.board[0][3] = 1;
-  // spawnRandom(state);
+  spawnRandom(state);
   printBoard(state);
-  renderBoard(state);
+  // renderBoard(state);
+  // moveLeft(state);
+  // printBoard(state);
   //   rotateBoard(state);
   //   printBoard(state);
   // printBoard(state)
@@ -217,42 +220,36 @@ function compressLeft(state, y) {
   let row = state.board[y];
   let lastPos = 0;
   for (let x = 0; x < row.length; x++) {
+    if (y == 3) {
+      // debugger;
+    }
     if (lastPos == x) continue;
+    let combine = false;
+    //* item not 0
     if (row[x] != 0) {
+      //* item mergable
       if (row[x] == row[lastPos]) {
         row[lastPos] += 1;
         row[x] = 0;
-        state.actions[posToNum({ x, y }, 4)] = {
-          newPos: { x: lastPos, y },
-          combine: true,
-        };
+        combine = true;
         lastPos++;
       } else {
+        // *item not mergable
+        //* item moveable to last pos
         if (row[lastPos] == 0) {
           row[lastPos] = row[x];
           row[x] = 0;
-          state.actions[posToNum({ x, y }, 4)] = {
-            newPos: { x: lastPos, y },
-            combine: false,
-          };
         } else {
+          //* item not moveable to last pos
           lastPos++;
-          if (lastPos != x) {
-            row[lastPos] = row[x];
-            row[x] = 0;
-            state.actions[posToNum({ x, y }, 4)] = {
-              newPos: { x: lastPos, y },
-              combine: false,
-            };
-          }
+          x--;
+          continue;
         }
       }
+      state.actions[posToNum({ x, y }, 4)] = {
+        newPos: { x: lastPos, y },
+        combine,
+      };
     }
-  }
-}
-
-function replaceBoard(board, b) {
-  for (let i = 0; i < board.length; i++) {
-    board[i] = b[i];
   }
 }
