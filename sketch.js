@@ -15,37 +15,44 @@
 function keyPress(state, e) {
   state.actions = {};
   if (e.code == "ArrowLeft") {
-    moveLeft(state);
+    if (testActions(state, 0)) {
+      moveLeft(state);
+    } else {
+      return;
+    }
+    // move(state, 0);
   } else if (e.code == "ArrowRight") {
-    moveRight(state);
+    if (testActions(state, 2)) {
+      move(state, 2);
+    } else {
+      return;
+    }
   } else if (e.code == "ArrowUp") {
-    moveUp(state);
+    if (testActions(state, 1)) {
+      move(state, 1);
+    } else {
+      return;
+    }
   } else if (e.code == "ArrowDown") {
-    moveDown(state);
+    if (testActions(state, 3)) {
+      move(state, 3);
+    } else {
+      return;
+    }
+  } else {
+    return;
   }
-  console.clear();
+  // console.clear();
   renderBoard(state);
   spawnRandom(state);
-  printBoard(state);
-  console.log(state.actions);
+  // printBoard(state);
+  // console.log(state.actions);
 }
 
-function moveRight(state) {
-  rotateXTimes(state, 2);
+function move(state, numRotations) {
+  rotateXTimes(state, numRotations);
   moveLeft(state);
-  rotateXTimes(state, 2);
-}
-
-function moveDown(state) {
-  rotateXTimes(state, 3);
-  moveLeft(state);
-  rotateXTimes(state, 1);
-}
-
-function moveUp(state) {
-  rotateXTimes(state, 1);
-  moveLeft(state);
-  rotateXTimes(state, 3);
+  rotateXTimes(state, 4 - numRotations);
 }
 
 function renderBoard(state) {
@@ -256,4 +263,19 @@ function compressLeft(state, y) {
       };
     }
   }
+}
+
+function testActions(state, numRotations) {
+  let s = copyState(state);
+  rotateXTimes(s, numRotations);
+  moveLeft(s);
+  return Object.keys(s.actions).length > 0;
+  // rotateXTimes(state, 4-numRotations);
+}
+
+// This is probably the dumbest code I've ever written
+function copyState(state) {
+  return JSON.parse(
+    JSON.stringify({ board: state.board, actions: state.actions })
+  );
 }
