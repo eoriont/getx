@@ -2,32 +2,12 @@
   const state = {
     board: createBoard(),
     tiles: {},
+    tileAnims: [],
     actions: {},
   };
 
-  // state.board = [
-  //   [0, 0, 0, 0],
-  //   [0, 0, 0, 0],
-  //   [0, 0, 0, 0],
-  //   [3, 2, 0, 1],
-  // ];
-  // spawnTile(state, { x: 0, y: 3 }, 3);
-  // spawnTile(state, { x: 1, y: 3 }, 2);
-  // spawnTile(state, { x: 3, y: 3 }, 1);
-  // spawnTile(state, { x: 2, y: 3 }, 1);
-  //   state.board[2][3] = 3;
-  // state.board[0][0] = 1;
-  // state.board[0][1] = 1;
-  // state.board[0][2] = 1;
-  // state.board[0][3] = 1;
   spawnRandom(state);
   printBoard(state);
-  // renderBoard(state);
-  // moveLeft(state);
-  // printBoard(state);
-  //   rotateBoard(state);
-  //   printBoard(state);
-  // printBoard(state)
 
   document.addEventListener("keydown", (e) => keyPress(state, e));
 })();
@@ -72,33 +52,60 @@ function renderBoard(state) {
   var b = document.getElementById("board");
 
   let newTiles = {};
+
+  // Finish all previous animations
+  state.tileAnims.map((x) => x.seek(x.duration));
+  state.tileAnims = [];
+
+  // Make new animations
   for (let i in state.tiles) {
+    let tileElm = state.tiles[i];
     if (i in state.actions) {
-      // debugger;
-      let tile = state.tiles[i];
+      // If tile has to go somewhere
       let action = state.actions[i];
       let newPos = action.newPos;
-      tile.innerHTML = state.board[newPos.y][newPos.x];
-      console.log(newPos);
-      anime({
-        targets: tile,
-        top: `${newPos.y * 50 + b.offsetTop}px`,
-        left: `${newPos.x * 50 + b.offsetLeft}px`,
-        complete: () => {
-          if (action.combine) {
-            console.log("combine!");
-            tile.remove();
-          }
-        },
-      });
-      newTiles[posToNum(newPos, 4)] = tile;
+      let newNum = posToNum(newPos, 4);
+      state.tileAnims.push(
+        anime({
+          targets: tileElm,
+          top: `${newPos.y * 50 + b.offsetTop}px`,
+          left: `${newPos.x * 50 + b.offsetLeft}px`,
+          easing: "easeOutExpo",
+          duration: 200,
+          complete: () => {
+            tileElm.innerHTML = state.board[newPos.y][newPos.x];
+            if (action.combine) {
+              tileElm.remove();
+            }
+          },
+        })
+      );
+      if (!action.combine) {
+        newTiles[newNum] = tileElm;
+      }
     } else {
       let newPos = numToPos(i, 4);
       state.tiles[i].innerHTML = state.board[newPos.y][newPos.x];
+      let mergingToObj = Object.values(state.actions).find((x) => {
+        return x.combine && posToNum(x.newPos, 4) == i;
+      });
+      if (mergingToObj) {
+        //* If something merges onto here
+        state.tileAnims.push(
+          anime({
+            targets: tileElm,
+            keyframes: [{ scale: 1.5 }, { scale: 1 }],
+            easing: "easeOutExpo",
+            duration: 100,
+            complete: () => {
+              tileElm.innerHTML = state.board[newPos.y][newPos.x];
+            },
+          })
+        );
+      }
       newTiles[i] = state.tiles[i];
     }
   }
-  console.log(state.tiles, newTiles);
   state.tiles = newTiles;
 }
 
@@ -220,9 +227,6 @@ function compressLeft(state, y) {
   let row = state.board[y];
   let lastPos = 0;
   for (let x = 0; x < row.length; x++) {
-    if (y == 3) {
-      // debugger;
-    }
     if (lastPos == x) continue;
     let combine = false;
     //* item not 0
@@ -247,7 +251,7 @@ function compressLeft(state, y) {
         }
       }
       state.actions[posToNum({ x, y }, 4)] = {
-        newPos: { x: lastPos, y },
+        newPos: { x: combine ? lastPos - 1 : lastPos, y },
         combine,
       };
     }
