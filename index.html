@@ -1,11 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Rainblur Landing Page Template: Tailwind Toolbox</title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css"/>
+    <!--Replace with your tailwind.css once created-->
+    <link href="https://unpkg.com/@tailwindcss/custom-forms/dist/custom-forms.min.css" rel="stylesheet" />
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
+
+      html {
+        font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      }
+    </style>
+
+    <title>Get Solana</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"
         integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdBJptINztxn1Z3SaKSKUS5UP60Q=="
@@ -13,12 +28,32 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&display=swap" rel="stylesheet">
-</head>
+  </head>
 
-<body>
-    <div class="board" id="board">
+  <body class="text-indigo-400 m-6 bg-cover bg-fixed" style="background-image: url('header.png');">
+
+      <!--Main-->
+      <div class="container w-full md:max-w-3xl mx-auto pt-20 text-center">
+        <!-- Text -->
+        <div class="w-full justify-center lg:items-start overflow-y-hidden">
+          <h1 class="my-4 text-3xl md:text-5xl text-white opacity-75 font-bold leading-tight text-center">
+            <span class="bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500">
+              Get Solana!
+            </span>
+            oriont.net
+          </h1>
+          <p class="leading-normal text-base md:text-2xl mb-8 text-center">
+            Join the tiles to get Solana.
+          </p>
+        </div>
+
+        <!-- Game -->
+        <div class="board w-full mx-auto bg-gradient-to-bl from-blue-500 via-purple-500 to-pink-500" id="board"></div>
+
+      </div>
+
+
     </div>
     <script src="sketch.js"></script>
-</body>
-
+  </body>
 </html>

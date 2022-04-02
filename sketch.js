@@ -74,16 +74,19 @@ function renderBoard(state) {
       let newPos = action.newPos;
       let newNum = posToNum(newPos, 4);
       let newTile = state.board[newPos.y][newPos.x];
+
       state.tileAnims.push(
         anime({
           targets: tileElm,
           top: `${newPos.y * 50 + b.offsetTop}px`,
           left: `${newPos.x * 50 + b.offsetLeft}px`,
           easing: "easeOutExpo",
-          backgroundColor: getTileColor(newTile),
+          // backgroundColor: getTileColor(newTile),
+
           duration: 200,
           complete: () => {
-            tileElm.innerHTML = newTile;
+            // tileElm.innerHTML = newTile;
+            tileElm.style.backgroundColor = getBackground(newTile);
             if (action.combine) {
               tileElm.remove();
             }
@@ -95,7 +98,7 @@ function renderBoard(state) {
       }
     } else {
       let newPos = numToPos(i, 4);
-      state.tiles[i].innerHTML = state.board[newPos.y][newPos.x];
+      // state.tiles[i].innerHTML = state.board[newPos.y][newPos.x];
       let mergingToObj = Object.values(state.actions).find((x) => {
         return x.combine && posToNum(x.newPos, 4) == i;
       });
@@ -108,9 +111,10 @@ function renderBoard(state) {
             keyframes: [{ scale: 1.5 }, { scale: 1 }],
             easing: "easeOutExpo",
             duration: 100,
-            backgroundColor: getTileColor(newTile),
+            // backgroundColor: getTileColor(newTile),
             complete: () => {
-              tileElm.innerHTML = newTile;
+              // tileElm.innerHTML = newTile;
+              tileElm.style.backgroundImage = getBackground(newTile);
             },
           })
         );
@@ -123,6 +127,26 @@ function renderBoard(state) {
 
 function getTileColor(num) {
   return hslToHex((num / 11) * 360, 100, 50);
+}
+
+function getBackground(num) {
+  const images = [
+    "",
+    'url("images/btc.png")',
+    'url("images/eth.png")',
+    'url("images/ltc.png")',
+    'url("images/tether.png")',
+    'url("images/ada.png")',
+    'url("images/algo.png")',
+    'url("images/xrp.png")',
+    'url("images/xmr.png")',
+    'url("images/tezos.png")',
+    'url("images/bat.png")',
+    'url("images/sol.png")',
+    'url("images/doge.png)',
+  ];
+
+  return images[num];
 }
 
 function hslToHex(h, s, l) {
@@ -179,8 +203,13 @@ function spawnTile(state, pos, val) {
   div.classList.add("tile");
   div.style.top = `${pos.y * 50 + b.offsetTop}px`;
   div.style.left = `${pos.x * 50 + b.offsetLeft}px`;
-  div.style.backgroundColor = getTileColor(val);
-  div.innerHTML = val;
+  let back = getBackground(val);
+  if (back) {
+    div.style.backgroundImage = back;
+  } else {
+    div.style.backgroundColor = getTileColor(val);
+  }
+  // div.innerHTML = val;
   b.appendChild(div);
   state.tiles[posToNum(pos, 4)] = div;
   state.tileAnims.push(
