@@ -18,14 +18,14 @@ function renderBoard(state) {
       let newTile = state.board[newPos.y][newPos.x];
 
       setBackground(tileElm, newTile);
+      let x = newPos.x * 50; //+ b.offsetLeft;
+      let y = newPos.y * 50; //+ b.offsetTop;
       state.tileAnims.push(
         anime({
           targets: tileElm,
-          top: `${newPos.y * 50 + b.offsetTop}px`,
-          left: `${newPos.x * 50 + b.offsetLeft}px`,
+          top: `${y}px`,
+          left: `${x}px`,
           easing: "easeOutExpo",
-          // backgroundColor: getTileColor(newTile),
-
           duration: 200,
           complete: () => {
             if (action.combine) {
@@ -39,7 +39,6 @@ function renderBoard(state) {
       }
     } else {
       let newPos = numToPos(i, 4);
-      // state.tiles[i].innerHTML = state.board[newPos.y][newPos.x];
       let mergingToObj = Object.values(state.actions).find((x) => {
         return x.combine && posToNum(x.newPos, 4) == i;
       });
@@ -104,8 +103,10 @@ function spawnTile(state, pos, val) {
   let div = document.createElement("div");
   let b = document.getElementById("board");
   div.classList.add("tile");
-  div.style.top = `${pos.y * 50 + b.offsetTop}px`;
-  div.style.left = `${pos.x * 50 + b.offsetLeft}px`;
+  let x = pos.x * 50; // + b.offsetLeft;
+  let y = pos.y * 50; // + b.offsetTop;
+  div.style.top = `${y}px`;
+  div.style.left = `${x}px`;
   setBackground(div, val);
   b.appendChild(div);
   state.tiles[posToNum(pos, 4)] = div;

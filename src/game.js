@@ -156,3 +156,18 @@ function spawnRandom(state) {
 
   spawnTile(state, pos, newTile);
 }
+
+function didLose(state) {
+  if (!state.board.some((x) => x.includes(0))) {
+    let actions1 = testActions(state, 0);
+    let actions2 = testActions(state, 1);
+    if (!actions1 && !actions2) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function didWin(state) {
+  return state.board.some((x) => x.includes(11));
+}

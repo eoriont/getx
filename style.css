@@ -13,5 +13,6 @@
 .board {
     width: 200px;
     height: 200px;
+    position: relative;
     /* background-color: rgb(255, 185, 185); */
 }

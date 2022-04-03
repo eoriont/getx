@@ -52,6 +52,31 @@
         <!-- Game -->
         <div class="board w-full mx-auto bg-gradient-to-bl from-blue-500 via-purple-500 to-pink-500" id="board"></div>
 
+        <!-- Lost/Won -->
+        <div class="relative">
+          <div id="losttext" class="absolute w-full justify-center lg:items-start overflow-y-hidden mt-10" style="opacity: 0;">
+            <h1 class="my-4 text-3xl md:text-5xl text-white opacity-75 font-bold leading-tight text-center">
+              <span class="bg-clip-text text-transparent bg-gradient-to-r from-red-500 via-pink-500 to-yellow-500">
+                You Lost!
+              </span>
+              Play Again?
+            </h1>
+            <p class="leading-normal text-base md:text-2xl mb-8 text-center">
+              Or add your name to the leaderboard!
+            </p>
+          </div>
+          <div id="windiv" class="absolute w-full justify-center lg:items-start overflow-y-hidden mt-10" style="opacity: 0;">
+            <h1 class="my-4 text-3xl md:text-5xl text-white opacity-75 font-bold leading-tight text-center">
+              <span class="bg-clip-text text-transparent bg-gradient-to-r from-yellow-500 via-green-500 to-blue-500">
+                You Win!
+              </span>
+              Keep Playing?
+            </h1>
+            <p class="leading-normal text-base md:text-2xl mb-8 text-center">
+              Or add your name to the leaderboard!
+            </p>
+          </div>
+        </div>
       </div>
 
 
