@@ -1,5 +1,9 @@
 function renderBoard(state) {
-  var b = document.getElementById("board");
+  if (state.newScore > 0) {
+    renderScore(state.score, state.newScore);
+    state.score += state.newScore;
+    state.newScore = 0;
+  }
 
   let newTiles = {};
 
@@ -131,4 +135,14 @@ function setBackground(tileElm, val) {
 
 function purgeBoard(state) {
   Object.values(state.tiles).forEach((x) => x.remove());
+}
+
+function renderScore(score, newScore) {
+  let scoreElm = document.getElementById("score");
+  anime({
+    targets: scoreElm,
+    innerHTML: [score, score + newScore],
+    round: 1,
+    easing: "easeOutExpo",
+  });
 }

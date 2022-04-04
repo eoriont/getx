@@ -79,6 +79,9 @@ function compressLeft(state, y) {
         row[lastPos] += 1;
         row[x] = 0;
         combine = true;
+        // Add to score
+        state.newScore += 2 ** row[lastPos];
+        // Move pointer
         lastPos++;
       } else {
         // *item not mergable
@@ -149,8 +152,8 @@ function spawnRandom(state) {
   // Assume there is an open position
   let pos = positions[Math.floor(Math.random() * positions.length)];
 
-  // Choose either 2 or 4
-  let prob = 0.4;
+  // Choose either 1 or 2
+  let prob = 0.6;
   let newTile = Math.random() > prob ? 1 : 2;
   board[pos.y][pos.x] = newTile;
 
@@ -180,5 +183,7 @@ function newState() {
     actions: {},
     lost: false,
     won: false,
+    score: 0,
+    newScore: 0,
   };
 }

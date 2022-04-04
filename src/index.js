@@ -8,6 +8,7 @@ spawnRandom(state);
 document.addEventListener("keydown", (e) => keyPress(state, e));
 document.getElementById("restart").addEventListener("mousedown", (e) => {
   hideGameResult(state);
+  renderScore(state.score, -state.score);
   purgeBoard(state);
   state = newState();
   spawnRandom(state);
