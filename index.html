@@ -32,7 +32,7 @@
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   </head>
 
-  <body class="text-indigo-400 m-6 bg-cover bg-fixed" style="background-image: url('header.png');">
+  <body class="text-indigo-400 m-6 bg-cover bg-fixed overflow-hidden" style="background-image: url('header.png');">
 
       <!--Main-->
       <div class="container w-full md:max-w-3xl mx-auto pt-20 text-center">
@@ -47,6 +47,10 @@
           <p class="leading-normal text-base md:text-2xl mb-8 text-center">
             Join the tiles to get Solana.
           </p>
+          <div class="flex flex-wrap space-x-10 justify-center">
+            <p class="text-4xl md:text-5xl text-white opacity-75 font-bold leading-tight text-center">Score: 100</p>
+            <button id="restart" type="button" class="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg  font-medium rounded-lg text-lg px-5 py-2.5 text-center mb-10">Restart</button>
+          </div>
         </div>
 
         <!-- Game -->

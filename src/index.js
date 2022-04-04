@@ -1,18 +1,19 @@
 // (() => {
-const state = {
-  board: createBoard(),
-  tiles: {},
-  tileAnims: [],
-  actions: {},
-  lost: false,
-  won: false,
-};
+let state = newState();
 
 spawnRandom(state);
 spawnRandom(state);
 // printBoard(state);
 
 document.addEventListener("keydown", (e) => keyPress(state, e));
+document.getElementById("restart").addEventListener("mousedown", (e) => {
+  hideGameResult(state);
+  purgeBoard(state);
+  state = newState();
+  spawnRandom(state);
+  spawnRandom(state);
+  renderBoard(state);
+});
 // })();
 
 function keyPress(state, e) {
@@ -81,7 +82,6 @@ function keyPress(state, e) {
 }
 
 function showLost(state) {
-  console.log("hi");
   let lostdiv = document.getElementById("losttext");
   anime({
     targets: lostdiv,
@@ -91,11 +91,26 @@ function showLost(state) {
 }
 
 function showWin(state) {
-  console.log("hi");
   let windiv = document.getElementById("windiv");
   anime({
     targets: windiv,
     opacity: 1,
     rotate: "1turn",
+  });
+}
+
+function hideGameResult(state) {
+  let windiv = document.getElementById("windiv");
+  anime({
+    targets: windiv,
+    opacity: 0,
+    rotate: "0turn",
+  });
+
+  let lostdiv = document.getElementById("losttext");
+  anime({
+    targets: lostdiv,
+    opacity: 0,
+    rotate: "0turn",
   });
 }

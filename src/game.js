@@ -171,3 +171,14 @@ function didLose(state) {
 function didWin(state) {
   return state.board.some((x) => x.includes(11));
 }
+
+function newState() {
+  return {
+    board: createBoard(),
+    tiles: {},
+    tileAnims: [],
+    actions: {},
+    lost: false,
+    won: false,
+  };
+}

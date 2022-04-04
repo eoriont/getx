@@ -128,3 +128,7 @@ function setBackground(tileElm, val) {
     tileElm.style.backgroundColor = getTileColor(val);
   }
 }
+
+function purgeBoard(state) {
+  Object.values(state.tiles).forEach((x) => x.remove());
+}
