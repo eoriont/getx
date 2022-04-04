@@ -15,6 +15,9 @@ document.getElementById("restart").addEventListener("mousedown", (e) => {
   spawnRandom(state);
   renderBoard(state);
 });
+document.addEventListener("touchstart", handleTouchStart, false);
+document.addEventListener("touchmove", (e) => handleTouchMove(e, state), false);
+
 // })();
 
 function keyPress(state, e) {
@@ -114,4 +117,67 @@ function hideGameResult(state) {
     opacity: 0,
     rotate: "0turn",
   });
+}
+
+function getTouches(evt) {
+  return evt.touches;
+}
+
+function handleTouchStart(evt) {
+  const firstTouch = getTouches(evt)[0];
+  xDown = firstTouch.clientX;
+  yDown = firstTouch.clientY;
+}
+
+// Necessary globals
+var xDown = null;
+var yDown = null;
+function handleTouchMove(evt, state) {
+  if (!xDown || !yDown) {
+    return;
+  }
+  if (state.lost) return;
+
+  var xUp = evt.touches[0].clientX;
+  var yUp = evt.touches[0].clientY;
+
+  var xDiff = xDown - xUp;
+  var yDiff = yDown - yUp;
+
+  if (Math.abs(xDiff) > Math.abs(yDiff)) {
+    /*most significant*/
+    if (xDiff < 0) {
+      if (testActions(state, 2)) {
+        move(state, 2);
+      }
+    } else {
+      if (testActions(state, 0)) {
+        moveLeft(state);
+      }
+    }
+  } else {
+    if (yDiff < 0) {
+      if (testActions(state, 3)) {
+        move(state, 3);
+      }
+    } else {
+      if (testActions(state, 1)) {
+        move(state, 1);
+      }
+    }
+  }
+  /* reset values */
+  xDown = null;
+  yDown = null;
+  renderBoard(state);
+  spawnRandom(state);
+  state.actions = {};
+
+  if (didWin(state)) {
+    state.won = true;
+    showWin(state);
+  } else if (didLose(state)) {
+    state.lost = true;
+    showLost(state);
+  }
 }
