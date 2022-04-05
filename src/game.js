@@ -149,7 +149,9 @@ function printBoard(state) {
 function spawnRandom(state) {
   let board = state.board;
   let positions = getOpenPositions(board);
-  // Assume there is an open position
+
+  if (positions.length == 0) return;
+
   let pos = positions[Math.floor(Math.random() * positions.length)];
 
   // Choose either 1 or 2

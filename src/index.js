@@ -37,52 +37,17 @@ function keyPress(state, e) {
     //   keyframes: [{ translateX: 250 }, { translateX: 0 }],
     // });
   }
-
-  if (state.lost) return;
-
-  if (e.code == "ArrowLeft") {
-    if (testActions(state, 0)) {
-      moveLeft(state);
-    } else {
-      return;
-    }
-    // move(state, 0);
-  } else if (e.code == "ArrowRight") {
-    if (testActions(state, 2)) {
-      move(state, 2);
-    } else {
-      return;
-    }
-  } else if (e.code == "ArrowUp") {
-    if (testActions(state, 1)) {
-      move(state, 1);
-    } else {
-      return;
-    }
-  } else if (e.code == "ArrowDown") {
-    if (testActions(state, 3)) {
-      move(state, 3);
-    } else {
-      return;
-    }
+  if (e.code == "ArrowLeft" || e.code == "KeyA") {
+    moveDir(state, "left");
+  } else if (e.code == "ArrowRight" || e.code == "KeyD") {
+    moveDir(state, "right");
+  } else if (e.code == "ArrowUp" || e.code == "KeyW") {
+    moveDir(state, "up");
+  } else if (e.code == "ArrowDown" || e.code == "KeyS") {
+    moveDir(state, "down");
   } else {
     return;
   }
-  // console.clear();
-  renderBoard(state);
-  spawnRandom(state);
-  state.actions = {};
-
-  if (didWin(state)) {
-    state.won = true;
-    showWin(state);
-  } else if (didLose(state)) {
-    state.lost = true;
-    showLost(state);
-  }
-
-  // printBoard(state);
-  // console.log(state.actions);
 }
 
 function showLost(state) {
@@ -136,7 +101,6 @@ function handleTouchMove(evt, state) {
   if (!xDown || !yDown) {
     return;
   }
-  if (state.lost) return;
 
   var xUp = evt.touches[0].clientX;
   var yUp = evt.touches[0].clientY;
@@ -145,30 +109,51 @@ function handleTouchMove(evt, state) {
   var yDiff = yDown - yUp;
 
   if (Math.abs(xDiff) > Math.abs(yDiff)) {
-    /*most significant*/
     if (xDiff < 0) {
-      if (testActions(state, 2)) {
-        move(state, 2);
-      }
+      moveDir(state, "right");
     } else {
-      if (testActions(state, 0)) {
-        moveLeft(state);
-      }
+      moveDir(state, "left");
     }
   } else {
     if (yDiff < 0) {
-      if (testActions(state, 3)) {
-        move(state, 3);
-      }
+      moveDir(state, "down");
     } else {
-      if (testActions(state, 1)) {
-        move(state, 1);
-      }
+      moveDir(state, "up");
     }
   }
   /* reset values */
   xDown = null;
   yDown = null;
+}
+
+function moveDir(state, dir) {
+  if (state.lost) return;
+
+  let moved = false;
+  if (dir == "left") {
+    if (testActions(state, 0)) {
+      moveLeft(state);
+      moved = true;
+    }
+  } else if (dir == "right") {
+    if (testActions(state, 2)) {
+      move(state, 2);
+      moved = true;
+    }
+  } else if (dir == "up") {
+    if (testActions(state, 1)) {
+      move(state, 1);
+      moved = true;
+    }
+  } else if (dir == "down") {
+    if (testActions(state, 3)) {
+      move(state, 3);
+      moved = true;
+    }
+  }
+
+  if (!moved) return;
+
   renderBoard(state);
   spawnRandom(state);
   state.actions = {};
